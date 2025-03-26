@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>文字作画</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#6B4EFF',
+                        secondary: '#F5F5F5'
+                    },
+                    borderRadius: {
+                        'none': '0px',
+                        'sm': '2px',
+                        DEFAULT: '4px',
+                        'md': '8px',
+                        'lg': '12px',
+                        'xl': '16px',
+                        '2xl': '20px',
+                        '3xl': '24px',
+                        'full': '9999px',
+                        'button': '4px'
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            min-height: 1024px;
+            background-color: #fff;
+        }
+        .container {
+            width: 1440px;
+            margin: 0 auto;
+        }
+        .sidebar {
+            width: 280px;
+            background: #fff;
+            border-right: 1px solid #eee;
+        }
+        .main-content {
+            flex: 1;
+            background: #fff;
+        }
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        .aspect-ratio-button {
+            border: 1px solid #E5E7EB;
+            padding: 6px 12px;
+            color: #666;
+            cursor: pointer;
+        }
+        .aspect-ratio-button.active {
+            background-color: #6B4EFF;
+            color: white;
+            border-color: #6B4EFF;
+        }
+        .toggle-switch {
+            width: 40px;
+            height: 20px;
+            background: #E5E7EB;
+            border-radius: 20px;
+            position: relative;
+            cursor: pointer;
+        }
+        .toggle-switch.active {
+            background: #6B4EFF;
+        }
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            background: white;
+            border-radius: 50%;
+            top: 2px;
+            left: 2px;
+            transition: 0.2s;
+        }
+        .toggle-switch.active::after {
+            left: 22px;
+        }
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            padding: 20px;
+        }
+        .image-card {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        .image-actions {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            display: flex;
+            gap: 8px;
+        }
+        .action-button {
+            width: 32px;
+            height: 32px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container flex h-screen">
+        <aside class="sidebar p-6 flex flex-col">
+            <div class="text-xl font-medium mb-6">文字作画</div>
+            
+            <div class="text-sm text-gray-600 mb-4">
+                <i class="fas fa-chevron-right text-xs"></i>
+                万能2.1专业 > 生成小狗
+            </div>
+
+            <div class="flex items-center gap-2 mb-4">
+                <i class="fas fa-book-open text-primary"></i>
+                <span class="text-sm">简易教程</span>
+                <span class="text-xs text-gray-400 ml-2">5/800</span>
+            </div>
+
+            <div class="relative mb-6">
+                <input type="text" placeholder="在此，帮你的想象力开门！" class="w-full px-4 py-2 text-sm border border-gray-200 rounded-lg">
+                <i class="fas fa-search absolute right-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+            </div>
+
+            <div class="mb-6">
+                <div class="font-medium mb-3">创意模板</div>
+                <button class="w-full px-4 py-2 text-sm text-left border border-gray-200 rounded-lg !rounded-button">
+                    选择创意模板
+                    <i class="fas fa-chevron-right float-right mt-1"></i>
+                </button>
+            </div>
+
+            <div class="mb-6">
+                <div class="font-medium mb-3">参考图</div>
+                <div class="w-full h-24 border-2 border-dashed border-gray-200 rounded-lg flex items-center justify-center text-sm text-gray-400">
+                    切换图片至此，智能解析
+                </div>
+            </div>
+
+            <div class="mb-6">
+                <div class="font-medium mb-3">比例</div>
+                <div class="grid grid-cols-3 gap-2">
+                    <button class="aspect-ratio-button !rounded-button active">1:1</button>
+                    <button class="aspect-ratio-button !rounded-button">16:9</button>
+                    <button class="aspect-ratio-button !rounded-button">9:16</button>
+                    <button class="aspect-ratio-button !rounded-button">4:3</button>
+                    <button class="aspect-ratio-button !rounded-button">3:4</button>
+                </div>
+            </div>
+
+            <div class="flex items-center justify-between mb-6">
+                <span class="font-medium">灵感模式</span>
+                <div class="toggle-switch"></div>
+            </div>
+
+            <button class="mt-auto w-full py-3 bg-primary text-white rounded-lg !rounded-button flex items-center justify-center gap-2">
+                生成画作
+            </button>
+        </aside>
+
+        <main class="main-content">
+            <header class="flex items-center justify-between p-6 border-b">
+                <div class="flex items-center gap-4">
+                    <h1 class="text-xl font-medium">万能2.1专业</h1>
+                    <span class="text-gray-400">生成小狗</span>
+                </div>
+                <div class="flex items-center gap-4">
+                    <button class="px-4 py-2 border border-gray-200 rounded-lg !rounded-button text-sm">复用图像</button>
+                    <button class="px-4 py-2 bg-primary text-white rounded-lg !rounded-button text-sm">再次生成</button>
+                </div>
+            </header>
+
+            <div class="image-grid">
+                <div class="image-card">
+                    <img src="https://ai-public.mastergo.com/ai/img_res/9d97b7c53f6e6cdd07f3b640848ce96a.jpg" class="w-full h-full object-cover" alt="Golden Retriever">
+                    <div class="image-actions">
+                        <button class="action-button"><i class="far fa-star"></i></button>
+                        <button class="action-button"><i class="fas fa-download"></i></button>
+                        <button class="action-button"><i class="fas fa-share"></i></button>
+                    </div>
+                </div>
+                <div class="image-card">
+                    <img src="https://ai-public.mastergo.com/ai/img_res/806e9d9e624a1767f0ce7ea6127e82f9.jpg" class="w-full h-full object-cover" alt="Golden Retriever">
+                    <div class="image-actions">
+                        <button class="action-button"><i class="far fa-star"></i></button>
+                        <button class="action-button"><i class="fas fa-download"></i></button>
+                        <button class="action-button"><i class="fas fa-share"></i></button>
+                    </div>
+                </div>
+                <div class="image-card">
+                    <img src="https://ai-public.mastergo.com/ai/img_res/7c48f963959e7a7afa0a49b50340eef2.jpg" class="w-full h-full object-cover" alt="Golden Retriever">
+                    <div class="image-actions">
+                        <button class="action-button"><i class="far fa-star"></i></button>
+                        <button class="action-button"><i class="fas fa-download"></i></button>
+                        <button class="action-button"><i class="fas fa-share"></i></button>
+                    </div>
+                </div>
+                <div class="image-card">
+                    <img src="https://ai-public.mastergo.com/ai/img_res/f4cdf20f80699f528caf5965dbe6e84c.jpg" class="w-full h-full object-cover" alt="Golden Retriever">
+                    <div class="image-actions">
+                        <button class="action-button"><i class="far fa-star"></i></button>
+                        <button class="action-button"><i class="fas fa-download"></i></button>
+                        <button class="action-button"><i class="fas fa-share"></i></button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.querySelectorAll('.aspect-ratio-button').forEach(button => {
+            button.addEventListener('click', () => {
+                document.querySelectorAll('.aspect-ratio-button').forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+            });
+        });
+
+        document.querySelector('.toggle-switch').addEventListener('click', function() {
+            this.classList.toggle('active');
+        });
+    </script>
+</body>
+</html>
